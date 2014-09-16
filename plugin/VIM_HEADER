@@ -1,0 +1,12 @@
+" <PUT DESCRIPTION HERE>
+" Last Change:<DATE>
+" Maintainer: <NAME> (<MAIL>)
+" License:    This file is placed in the public domain.
+
+if exists("g:loaded_<PLUGIN_NAME>")
+  finish
+endif
+let g:loaded_<PLUGIN_NAME> = 1
+
+let s:save_cpo = &cpo
+set cpo&vim
