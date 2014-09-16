@@ -1,0 +1,41 @@
+function! F()
+    let l:pattern_creation = '<AUTEUR>'
+    let l:pattern_update   = '<DATE>'
+    let l:updated          = '2014'
+    let l:pattern_update2  = '<LAST>'
+    let l:updated2         = 'last'
+
+    let l:original = ' * \date   <AUTEUR> <LAST> modification : <DATE>'
+    let l:current_line = ' * \date   Rin last modification : 2014'
+
+    let l:pattern_escaped  = escape(l:original, '\*.')
+
+    let l:new = l:current_line
+
+    let l:pattern_match    = l:pattern_escaped
+    let l:pattern_match    = substitute(l:pattern_match, l:pattern_creation,  '.*', '')
+    let l:pattern_match    = substitute(l:pattern_match, l:pattern_update,    '.*', '')
+    let l:pattern_match    = substitute(l:pattern_match, l:pattern_update2,   '.*', '')
+
+    let l:select_new       = substitute(l:pattern_escaped, l:pattern_update,  '\\zs.*\\ze',  '' )
+    let l:select_new       = substitute(l:select_new,      '<[^>]*>',         '.*',          'g')
+    let l:new              = substitute(l:new,             l:select_new,      l:updated,     '' )
+
+    let l:select_new       = substitute(l:pattern_escaped, l:pattern_update2, '\\zs.*\\ze',  '' )
+    let l:select_new       = substitute(l:select_new,      '<[^>]*>',         '.*',          'g')
+    let l:new              = substitute(l:new,             l:select_new,      l:updated2,    '' )
+
+    echo 'init ' . l:current_line
+    echo 'match' . l:pattern_match
+    echo 'org  ' . l:original
+    echo 'seln ' . l:select_new
+    echo 'new  ' . l:new
+
+
+    echo 'match ?  '
+    echo  l:current_line =~# l:pattern_match
+    echo 'update ? '
+    echo  l:current_line != l:new
+endfunction
+
+call F()
