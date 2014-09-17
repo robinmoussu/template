@@ -7,5 +7,5 @@ let template_h#creation = [
             \ [ '<GUARD_NAME>',   '\=toupper(expand("%:t:r"))' ],
             \ ] + template_user#creation
 
-let template_h#update   = default#update
-let template_h#skip     = template_h#skip
+let template_h#update   = template_default#update
+let template_h#skip     = template_default#skip
