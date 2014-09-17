@@ -2,7 +2,7 @@ source template.vim
 
 " exemple of vimrc file
 
-let s:template_path = expand('%:p:h') . '/'
+let s:template_path = expand('%:p:h') . '/../default_template/'
 
 let s:creation = [
             \ [ '<AUTHOR_NAME>',   'Robin Moussu' ],
