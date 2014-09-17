@@ -31,13 +31,13 @@ function! s:Restore_position()
 endfunction
 
 " Open all templates files
-function! s:Open_Template(files_template)
+function! s:Open_Template(path, files_template)
     if !exists('s:do_bw')
         let s:do_bw = []
     endif
 
     for l:filename in a:files_template
-        let l:file = 'template_file/' . l:filename
+        let l:file = a:path . l:filename
         if bufnr(l:file) == -1
             let l:current_file = bufnr('%')
             silent exec 'e ' . l:file
@@ -63,7 +63,7 @@ endfunction
 
 "-----creation-----
 
-function! s:Header_create(header_file, pattern)
+function! s:Header_create(path, header_file, pattern)
     " Create new header using pattern file and substitution lists
 
     " put template_file on top of file
@@ -72,7 +72,7 @@ function! s:Header_create(header_file, pattern)
     call cursor(1, 1)
     put! _
     for l:filename in a:header_file
-        let l:file = 'template_file/' . l:filename
+        let l:file = a:path . l:filename
         exec "r" l:file
         let l:line_total += s:Line_number(l:file) + 1
         call cursor(l:line_total, 1)
@@ -88,7 +88,7 @@ function! s:Header_create(header_file, pattern)
     endfor
 endfunction
 
-function! s:Footer_create(footer_file, pattern)
+function! s:Footer_create(path, footer_file, pattern)
     " Create new header using pattern file and substitution lists
 
     " put template_file on bottom of file
@@ -96,7 +96,7 @@ function! s:Footer_create(footer_file, pattern)
     let l:foot_line_start = line('$') + 1
     call cursor(line('$'), 1)
     for l:filename in a:footer_file
-        let l:file = 'template_file/' . l:filename
+        let l:file = a:path . l:filename
         call cursor(line('$'), 1)
         put _
         exec "r" l:file
@@ -112,9 +112,9 @@ endfunction
 
 " Update current file according to pattern.
 " Cursor position must match the template
-function! s:Update_file(files_template, pattern_creation, pattern_update, pattern_skip, skip_first_lines)
+function! s:Update_file(path, files_template, pattern_creation, pattern_update, pattern_skip, skip_first_lines)
     for l:filename in a:files_template
-        let l:file = 'template_file/' . l:filename
+        let l:file = a:path . l:filename
         let l:can_be_skip = a:skip_first_lines
 
         let l:bufnum   = bufnr(l:file)
@@ -196,25 +196,25 @@ endfunction
 
 "-----extern call-----
 
-function! template#Template_create(template, pattern_creation, pattern_update, pattern_skip)
+function! template#Template_create(path, template, pattern_creation, pattern_update, pattern_skip)
     " Create header and footer template
     call s:Save_position()
-    call s:Open_Template(a:template[0] + a:template[1])
-    call s:Header_create(a:template[0], a:pattern_creation + a:pattern_update + a:pattern_skip)
-    call s:Footer_create(a:template[1], a:pattern_creation + a:pattern_update + a:pattern_skip)
+    call s:Open_Template(a:path, a:template[0] + a:template[1])
+    call s:Header_create(a:path, a:template[0], a:pattern_creation + a:pattern_update + a:pattern_skip)
+    call s:Footer_create(a:path, a:template[1], a:pattern_creation + a:pattern_update + a:pattern_skip)
     call s:Close_Template()
     call s:Restore_position()
 endfunction
 
-function! template#Template_update(template, pattern_creation, pattern_update, pattern_skip)
+function! template#Template_update(path, template, pattern_creation, pattern_update, pattern_skip)
     call s:Save_position()
-    call s:Open_Template(a:template[0] + a:template[1])
+    call s:Open_Template(a:path, a:template[0] + a:template[1])
 
     "go to first line of current file
     call cursor(1,1)
 
-    call s:Update_file(a:template[0], a:pattern_creation, a:pattern_update, a:pattern_skip, 0)
-    call s:Update_file(a:template[1], a:pattern_creation, a:pattern_update, a:pattern_skip, 1)
+    call s:Update_file(a:path, a:template[0], a:pattern_creation, a:pattern_update, a:pattern_skip, 0)
+    call s:Update_file(a:path, a:template[1], a:pattern_creation, a:pattern_update, a:pattern_skip, 1)
 
     call s:Close_Template()
     call s:Restore_position()
