@@ -196,7 +196,7 @@ endfunction
 
 "-----extern call-----
 
-function! Template_create(path, template, pattern_creation, pattern_update, pattern_skip)
+function! template#Template_create(path, template, pattern_creation, pattern_update, pattern_skip)
     " Create header and footer template
     call s:Save_position()
     call s:Open_Template(a:path, a:template[0] + a:template[1])
@@ -206,7 +206,7 @@ function! Template_create(path, template, pattern_creation, pattern_update, patt
     call s:Restore_position()
 endfunction
 
-function! Template_update(path, template, pattern_creation, pattern_update, pattern_skip)
+function! template#Template_update(path, template, pattern_creation, pattern_update, pattern_skip)
     call s:Save_position()
     call s:Open_Template(a:path, a:template[0] + a:template[1])
 
@@ -220,7 +220,7 @@ function! Template_update(path, template, pattern_creation, pattern_update, patt
     call s:Restore_position()
 endfunction
 
-function! Shell_command(command)
+function! template#Shell_command(command)
     " Convert Unix command to valid vim substitution command
     " TODO maybe shellescape is not needed anymore
     return '\=systemlist(' . escape(shellescape( a:command ), '<>') . ')[0]    '
