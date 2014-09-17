@@ -199,22 +199,22 @@ endfunction
 function! template#Template_create(template, pattern_creation, pattern_update, pattern_skip)
     " Create header and footer template
     call s:Save_position()
-    call s:Open_Template('template_file/', a:template[0] + a:template[1])
-    call s:Header_create('template_file/', a:template[0], a:pattern_creation + a:pattern_update + a:pattern_skip)
-    call s:Footer_create('template_file/', a:template[1], a:pattern_creation + a:pattern_update + a:pattern_skip)
+    call s:Open_Template(a:template[0] + a:template[1])
+    call s:Header_create(a:template[0], a:pattern_creation + a:pattern_update + a:pattern_skip)
+    call s:Footer_create(a:template[1], a:pattern_creation + a:pattern_update + a:pattern_skip)
     call s:Close_Template()
     call s:Restore_position()
 endfunction
 
 function! template#Template_update(template, pattern_creation, pattern_update, pattern_skip)
     call s:Save_position()
-    call s:Open_Template('template_file/', a:template[0] + a:template[1])
+    call s:Open_Template(a:template[0] + a:template[1])
 
     "go to first line of current file
     call cursor(1,1)
 
-    call s:Update_file('template_file/', a:template[0], a:pattern_creation, a:pattern_update, a:pattern_skip, 0)
-    call s:Update_file('template_file/', a:template[1], a:pattern_creation, a:pattern_update, a:pattern_skip, 1)
+    call s:Update_file(a:template[0], a:pattern_creation, a:pattern_update, a:pattern_skip, 0)
+    call s:Update_file(a:template[1], a:pattern_creation, a:pattern_update, a:pattern_skip, 1)
 
     call s:Close_Template()
     call s:Restore_position()
