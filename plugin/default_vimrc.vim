@@ -1,21 +1,6 @@
 runtime! pattern_file/*.vim
 
 """""""""""""
-" project_1 "
-"""""""""""""
-
-let s:project_1_h = [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
-let s:project_1_c = [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []]
-
-let s:project_1_creation_h = [
-            \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
-            \ ] + template_h#creation
-
-let s:project_1_creation_c = [
-            \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
-            \ ] + template_c#creation
-
-"""""""""""""
 " project_2 "
 """""""""""""
 let s:project_2_h = [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
@@ -38,9 +23,9 @@ augroup Template
     au!
     autocmd BufNewFile    *.h
                 \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_create(template_h#project_1_h, template_h#project_1_creation_h, template_h#update, template_h#skip)
+                \|    call template#Template_create(template_project_1_h#template, template_project_1_h#creation, template_project_1_h#update, template_project_1_h#skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_create(template_h#project_2_h, template_h#project_2_creation_h, template_h#update, template_h#skip)
+                \|    call template#Template_create(template_project_2_h#template, template_project_2_h#creation, template_project_2_h#update, template_project_2_h#skip)
                 \|else
                 \|    call template#Template_create(template_h#template, template_h#creation, template_h#update, template_h#skip)
                 \|endif
