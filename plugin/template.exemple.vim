@@ -1,3 +1,5 @@
+source template.vim
+
 " exemple of vimrc file
 
 let s:template_path = expand('%:p:h') . '/'
