@@ -2,7 +2,7 @@ runtime! pattern_file/*.vim
 
 " exemple of vimrc file
 
-let s:template_path = '~/.vim/bundle/template/template_file/'
+let s:template_path = 'template_file/'
 
 """""""""""""
 " project_1 "
