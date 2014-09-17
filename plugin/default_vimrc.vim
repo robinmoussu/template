@@ -1,13 +1,13 @@
+runtime! template_file/*.vim
+
 " exemple of vimrc file
 
-let s:template_path = expand('%:p:h') . '/../default_template/'
+let s:template_path = '~/.vim/bundle/template/default_template/'
 
 let s:creation = [
-            \ [ '<AUTHOR_NAME>',   'Robin Moussu' ],
-            \ [ '<MAIL>',          'robin.moussu+github <at> gmail.com' ],
             \ [ '<USER>',          template#Shell_command('$USER') ],
             \ [ '<CREATION_DATE>', template#Shell_command('LANG=C; date "+%d %b %Y"')],
-            \ ]
+            \ ] + template_user#creation
 
 let s:update = [
             \ [ '<FILENAME>',      '\=expand("%:p:t")'],
@@ -20,26 +20,19 @@ let s:skip = [
             \ ]
 
 """""""""""""
-" common_h  "
-"""""""""""""
-
-let s:template_h  = [[ 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
-let s:template_c  = [[ 'COMMON_HEADER' ], []]
-
-let s:template_creation_h_c = [
-            \ [ '<GUARD_NAME>',   '\=toupper(expand("%:t:r"))' ],
-            \ ] + s:creation
-
-"""""""""""""
 " project_1 "
 """""""""""""
 
 let s:project_1_h = [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
 let s:project_1_c = [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []]
 
-let s:project_1_creation_h_c = [
+let s:project_1_creation_h = [
             \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
-            \ ] + s:template_creation_h_c
+            \ ] + template_h#creation
+
+let s:project_1_creation_c = [
+            \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
+            \ ] + template_c#creation
 
 """""""""""""
 " project_2 "
@@ -47,9 +40,13 @@ let s:project_1_creation_h_c = [
 let s:project_2_h = [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
 let s:project_2_c = [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []]
 
-let s:project_2_creation_h_c= [
+let s:project_2_creation_h = [
             \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
-            \ ] + s:template_creation_h_c
+            \ ] + template_h#creation
+
+let s:project_2_creation_c = [
+            \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
+            \ ] + template_c#creation
 
 """""""""""
 " autocmd "
