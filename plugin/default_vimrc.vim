@@ -1,23 +1,8 @@
-runtime! template_file/*.vim
+runtime! pattern_file/*.vim
 
 " exemple of vimrc file
 
-let s:template_path = '~/.vim/bundle/template/default_template/'
-
-let s:creation = [
-            \ [ '<USER>',          template#Shell_command('$USER') ],
-            \ [ '<CREATION_DATE>', template#Shell_command('LANG=C; date "+%d %b %Y"')],
-            \ ] + template_user#creation
-
-let s:update = [
-            \ [ '<FILENAME>',      '\=expand("%:p:t")'],
-            \ [ '<YEAR>',          template#Shell_command('LANG=C; date "+%Y"') ],
-            \ [ '<CURRENT_DATE>',  template#Shell_command('LANG=C; date "+%d %b %Y"')],
-            \ ]
-
-let s:skip = [
-            \ [ '<PUT DESCRIPTION HERE>', '*** Description ***' ],
-            \ ]
+let s:template_path = '~/.vim/bundle/template/template_file/'
 
 """""""""""""
 " project_1 "
@@ -57,11 +42,11 @@ augroup Template
     au!
     autocmd BufNewFile    *.h
                 \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_create(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, template_h#project_1_h, template_h#project_1_creation_h, template_h#update, template_h#skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_create(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, template_h#project_2_h, template_h#project_2_creation_h, template_h#update, template_h#skip)
                 \|else
-                \|    call template#Template_create(s:template_path, s:template_h, s:template_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, template_h#template, template_h#creation, template_h#update, template_h#skip)
                 \|endif
 
     autocmd BufWritePre   *.h

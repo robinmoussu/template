@@ -1,4 +1,4 @@
-ru template_file/template_user.vim
+ru pattern_file/template_user.vim
 
 let template_c#template  = [[ 'COMMON_HEADER' ], []]
 
