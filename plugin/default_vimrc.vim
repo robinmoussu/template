@@ -1,5 +1,3 @@
-source template.vim
-
 " exemple of vimrc file
 
 let s:template_path = expand('%:p:h') . '/../default_template/'
@@ -7,14 +5,14 @@ let s:template_path = expand('%:p:h') . '/../default_template/'
 let s:creation = [
             \ [ '<AUTHOR_NAME>',   'Robin Moussu' ],
             \ [ '<MAIL>',          'robin.moussu+github <at> gmail.com' ],
-            \ [ '<USER>',          g:Shell_command('$USER') ],
-            \ [ '<CREATION_DATE>', g:Shell_command('LANG=C; date "+%d %b %Y"')],
+            \ [ '<USER>',          template#Shell_command('$USER') ],
+            \ [ '<CREATION_DATE>', template#Shell_command('LANG=C; date "+%d %b %Y"')],
             \ ]
 
 let s:update = [
             \ [ '<FILENAME>',      '\=expand("%:p:t")'],
-            \ [ '<YEAR>',          g:Shell_command('LANG=C; date "+%Y"') ],
-            \ [ '<CURRENT_DATE>',  g:Shell_command('LANG=C; date "+%d %b %Y"')],
+            \ [ '<YEAR>',          template#Shell_command('LANG=C; date "+%Y"') ],
+            \ [ '<CURRENT_DATE>',  template#Shell_command('LANG=C; date "+%d %b %Y"')],
             \ ]
 
 let s:skip = [
@@ -62,38 +60,38 @@ augroup Template
     au!
     autocmd BufNewFile    *.h
                 \ if expand("%:p") =~? 'project_1'
-                \|    call Template_create(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call Template_create(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
                 \|else
-                \|    call Template_create(s:template_path, s:template_h, s:template_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:template_h, s:template_creation_h_c, s:update, s:skip)
                 \|endif
 
     autocmd BufWritePre   *.h
                 \ if expand("%:p") =~? 'project_1'
-                \|    call Template_update(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call Template_update(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
                 \|else
-                \|    call Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
                 \|endif
 
     autocmd BufNewFile    *.c
                 \ if expand("%:p") =~? 'project_1'
-                \|    call Template_create(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call Template_create(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
                 \|else
-                \|    call Template_create(s:template_path, s:template_c, s:template_creation_h_c, s:update, s:skip)
+                \|    call template#Template_create(s:template_path, s:template_c, s:template_creation_h_c, s:update, s:skip)
                 \|endif
 
     autocmd BufWritePre   *.c
                 \ if expand("%:p") =~? 'project_1'
-                \|    call Template_update(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
                 \|elseif expand("%:p") =~? 'project_2'
-                \|    call Template_update(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
                 \|else
-                \|    call Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
+                \|    call template#Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
                 \|endif
 
 augroup END

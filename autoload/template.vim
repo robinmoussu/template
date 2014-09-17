@@ -220,7 +220,7 @@ function! Template_update(path, template, pattern_creation, pattern_update, patt
     call s:Restore_position()
 endfunction
 
-function! g:Shell_command(command)
+function! Shell_command(command)
     " Convert Unix command to valid vim substitution command
     " TODO maybe shellescape is not needed anymore
     return '\=systemlist(' . escape(shellescape( a:command ), '<>') . ')[0]    '
