@@ -1,3 +1,8 @@
+if exists("g:loaded_plugin_template#template")
+  finish
+endif
+let g:loaded_plugin_template#template = 1
+
 "--- common -----
 
 " Save cursor current position and registers
@@ -196,33 +201,64 @@ endfunction
 
 "-----extern call-----
 
-function! template#Template_create(path, template, pattern_creation, pattern_update, pattern_skip)
-    " Create header and footer template
-    call s:Save_position()
-    call s:Open_Template(a:path, a:template[0] + a:template[1])
-    call s:Header_create(a:path, a:template[0], a:pattern_creation + a:pattern_update + a:pattern_skip)
-    call s:Footer_create(a:path, a:template[1], a:pattern_creation + a:pattern_update + a:pattern_skip)
-    call s:Close_Template()
-    call s:Restore_position()
+function! template#Template_create(path)
+    for template in g:template_pattern
+        if expand('%:p') =~# '^' . template['pattern'] . '$'
+            " Create header and footer template
+            call s:Save_position()
+            call s:Open_Template(a:path, template['template'][0] + template['template'][1])
+            call s:Header_create(a:path, template['template'][0], template['creation'] + template['update'] + template['skip'])
+            call s:Footer_create(a:path, template['template'][1], template['creation'] + template['update'] + template['skip'])
+            call s:Close_Template()
+            call s:Restore_position()
+
+            return
+        endif
+    endfor
 endfunction
 
-function! template#Template_update(path, template, pattern_creation, pattern_update, pattern_skip)
-    call s:Save_position()
-    call s:Open_Template(a:path, a:template[0] + a:template[1])
+function! template#Template_update(path)
+    for template in g:template_pattern
+        if expand('%:p') =~# '^' . template['pattern'] . '$'
+            call s:Save_position()
+            call s:Open_Template(a:path, template['template'][0] + template['template'][1])
 
-    "go to first line of current file
-    call cursor(1,1)
+            "go to first line of current file
+            call cursor(1,1)
 
-    call s:Update_file(a:path, a:template[0], a:pattern_creation, a:pattern_update, a:pattern_skip, 0)
-    call s:Update_file(a:path, a:template[1], a:pattern_creation, a:pattern_update, a:pattern_skip, 1)
+            call s:Update_file(a:path, template['template'][0], template['creation'], template['update'], template['skip'], 0)
+            call s:Update_file(a:path, template['template'][1], template['creation'], template['update'], template['skip'], 1)
 
-    call s:Close_Template()
-    call s:Restore_position()
+            call s:Close_Template()
+            call s:Restore_position()
+        endif
+    endfor
 endfunction
 
 function! template#Shell_command(command)
     " Convert Unix command to valid vim substitution command
     " TODO maybe shellescape is not needed anymore
-    return '\=systemlist(' . escape(shellescape( a:command ), '<>') . ')[0]    '
+    return '\=systemlist(' . escape(shellescape( a:command ), '<>') . ')[0]'
 endfunction
 
+function! Sort_patterns(pattern_1, pattern_2)
+   return a:pattern_1['priority'] - a:pattern_2['priority']
+endfunction
+
+let g:template_pattern = []
+function! template#add(pattern)
+    if !has_key(a:pattern, 'pattern') || !has_key(a:pattern, 'priority') || !has_key(a:pattern, 'template') || !has_key(a:pattern, 'creation') || !has_key(a:pattern, 'update') || !has_key(a:pattern, 'skip')
+        echoerr 'pattern invalid'
+        echoerr a:pattern['pattern'  ]
+        echoerr a:pattern['priority' ]
+        echoerr string(a:pattern['template' ])
+        echoerr string(a:pattern['creation' ])
+        echoerr string(a:pattern['update'   ])
+        echoerr string(a:pattern['skip'     ])
+    endif
+
+    let a:pattern['pattern'] = substitute(substitute(escape(a:pattern['pattern'], '.'), '\*', '.*', 'g'), '\/\.\*\/\.\*', '\/.*', 'g')
+    let g:template_pattern += [ a:pattern ]
+
+    call sort(g:template_pattern, 'Sort_patterns')
+endfunction

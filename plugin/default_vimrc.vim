@@ -1,62 +1,98 @@
-runtime! pattern_file/*.vim
+if exists("g:loaded_plugin_template#default_vimrc")
+  finish
+endif
+let g:loaded_plugin_template#default_vimrc = 1
 
 let s:template_path = '~/.vim/bundle/template/template_file/'
 
-"""""""""""""
-" project_2 "
-"""""""""""""
-let s:project_2_h = [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]]
-let s:project_2_c = [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []]
+let template_user#creation = [
+            \ [ '<AUTHOR_NAME>',   'Robin Moussu' ],
+            \ [ '<MAIL>',          'robin.moussu+github <at> gmail.com' ],
+            \ ]
 
-let s:project_2_creation_h = [
-            \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
-            \ ] + template_h#creation
+let template_user#update   = []
+let template_user#skip     = []
 
-let s:project_2_creation_c = [
-            \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
-            \ ] + template_c#creation
+let template_default#creation = [
+            \ [ '<USER>',          template#Shell_command('$USER') ],
+            \ [ '<CREATION_DATE>', template#Shell_command('LANG=C; date "+%d %b %Y"')],
+            \ [ '<GUARD_NAME>',    '\=toupper(expand("%:t:r"))' ],
+            \ ] + template_user#creation
 
-"""""""""""
-" autocmd "
-"""""""""""
+let template_default#update = [
+            \ [ '<FILENAME>',      '\=expand("%:p:t")'],
+            \ [ '<YEAR>',          template#Shell_command('LANG=C; date "+%Y"') ],
+            \ [ '<CURRENT_DATE>',  template#Shell_command('LANG=C; date "+%d %b %Y"')],
+            \ ] + template_user#update
 
+let template_default#skip = [
+            \ [ '<PUT DESCRIPTION HERE>', '*** Description ***' ],
+            \ ] + template_user#skip
+
+call template#add ({
+            \'pattern'  : '*.c',
+            \'priority' : 100,
+            \'template' : [[ 'COMMON_HEADER' ], []],
+            \'creation' : template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip,
+            \})
+
+call template#add ({
+            \'pattern'  : '*.h',
+            \'priority' : 100,
+            \'template' : [[ 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]],
+            \'creation' : template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip
+            \})
+
+call template#add ({
+            \'pattern'  : '*/project_1/*/*.c',
+            \'priority' : 50,
+            \'template' : [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []],
+            \'creation' : [
+                \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
+                \ ] + template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip
+            \})
+
+call template#add ({
+            \'pattern'  : '*/project_1/*/*.h',
+            \'priority' : 50,
+            \'template' : [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]],
+            \'creation' : [
+                \ [ '<SOFTWARE_NAME>', 'PROJECT 1' ],
+                \ ] + template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip
+            \})
+
+call template#add ({
+            \'pattern'  : '*/project_2/*/*.c',
+            \'priority' : 50,
+            \'template' : [[ 'short_licence/gpl_v3', 'COMMON_HEADER' ], []],
+            \'creation' : [
+                \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
+                \ ] + template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip
+            \})
+
+call template#add ({
+            \'pattern'  : '*/project_2/*/*.h',
+            \'priority' : 50,
+            \'template' : [[ 'short_licence/gpl_v3', 'COMMON_HEADER', 'GUARDS_HEADER' ], [ 'GUARDS_FOOTER' ]],
+            \'creation' : [
+                \ [ '<SOFTWARE_NAME>', 'PROJECT 2' ],
+                \ ] + template_default#creation,
+            \'update'   : template_default#update,
+            \'skip'     : template_default#skip,
+            \})
 
 augroup Template
     au!
-    autocmd BufNewFile    *.h
-                \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_create(s:template_path, template_project_1_h#template, template_project_1_h#creation, template_project_1_h#update, template_project_1_h#skip)
-                \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_create(s:template_path, template_project_2_h#template, template_project_2_h#creation, template_project_2_h#update, template_project_2_h#skip)
-                \|else
-                \|    call template#Template_create(s:template_path, template_h#template, template_h#creation, template_h#update, template_h#skip)
-                \|endif
-
-    autocmd BufWritePre   *.h
-                \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_update(s:template_path, s:project_1_h, s:project_1_creation_h_c, s:update, s:skip)
-                \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_update(s:template_path, s:project_2_h, s:project_2_creation_h_c, s:update, s:skip)
-                \|else
-                \|    call template#Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
-                \|endif
-
-    autocmd BufNewFile    *.c
-                \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_create(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
-                \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_create(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
-                \|else
-                \|    call template#Template_create(s:template_path, s:template_c, s:template_creation_h_c, s:update, s:skip)
-                \|endif
-
-    autocmd BufWritePre   *.c
-                \ if expand("%:p") =~? 'project_1'
-                \|    call template#Template_update(s:template_path, s:project_1_c, s:project_1_creation_h_c, s:update, s:skip)
-                \|elseif expand("%:p") =~? 'project_2'
-                \|    call template#Template_update(s:template_path, s:project_2_c, s:project_2_creation_h_c, s:update, s:skip)
-                \|else
-                \|    call template#Template_update(s:template_path, s:h_header, s:h_footer, s:template_creation_h_c, s:update, s:skip)
-                \|endif
-
+    autocmd BufNewFile  * call template#Template_create(s:template_path)
+    autocmd BufWritePre * call template#Template_update(s:template_path)
 augroup END
